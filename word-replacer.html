@@ -1,23 +1,90 @@
 <!doctype html>
-<html lang="ja"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/><title>ワード変換メーカー</title><link rel="manifest" href="./manifest.json"/><meta name="theme-color" content="#101114"/><style>
-:root{--bg:#101114;--panel:#181a20;--panel2:#20232b;--field:#0c0d10;--text:#f2f0e8;--muted:#aaa49a;--line:#353845;--gold:#d4af37;--gold2:#f2c14e;--danger:#ff6b6b;--ok:#85d99f;--radius:18px;--shadow:0 18px 40px rgba(0,0,0,.35);font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}*{box-sizing:border-box}body{margin:0;min-height:100vh;background:radial-gradient(circle at 20% 0%,rgba(212,175,55,.18),transparent 28rem),radial-gradient(circle at 95% 10%,rgba(242,193,78,.08),transparent 24rem),var(--bg);color:var(--text);font-family:var(--font);line-height:1.65;padding:20px}.app{width:min(900px,100%);margin:0 auto}.toolbox-back-link{display:inline-flex;align-items:center;gap:.35em;margin:0 0 10px;color:#f2c14e;text-decoration:none;font-weight:800}.toolbox-back-link:visited{color:#f2c14e}header{margin:6px 0 18px;padding:18px 18px 4px}h1{font-size:clamp(1.5rem,4.8vw,2.25rem);line-height:1.15;margin:0 0 10px}.lead{color:var(--muted);margin:0;max-width:58rem}.card{background:linear-gradient(180deg,rgba(255,255,255,.035),rgba(255,255,255,.015)),var(--panel);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:16px;margin-top:18px}.card-title{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px}h2{font-size:1.08rem;margin:0}.hint{color:var(--muted);font-size:.88rem;margin:8px 0 0}textarea,input,select{width:100%;border:1px solid var(--line);background:var(--field);color:var(--text);border-radius:12px;padding:12px 13px;font:inherit;outline:none;line-height:1.65}textarea:focus,input:focus,select:focus{border-color:rgba(212,175,55,.72);box-shadow:0 0 0 3px rgba(212,175,55,.16)}textarea{min-height:220px;resize:vertical;white-space:pre-wrap}.button-row,.toolbar{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}button{appearance:none;border:1px solid var(--line);background:var(--panel2);color:var(--text);border-radius:999px;padding:10px 13px;font:inherit;line-height:1;cursor:pointer;min-height:42px;font-weight:700}.primary{background:linear-gradient(180deg,var(--gold2),var(--gold));color:#18130a;border-color:transparent}.ghost{background:transparent}.danger{color:#ffd1d1;border-color:rgba(255,107,107,.45)}.mini,.small{font-size:.84rem;padding:7px 10px;min-height:36px}.pill{display:inline-flex;align-items:center;gap:6px;color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:4px 8px;font-size:.78rem}.status,.copy-status{min-height:1.4em;color:var(--ok);font-size:.88rem;margin-top:9px}.empty{color:var(--muted);border:1px dashed var(--line);border-radius:var(--radius);padding:16px;margin-top:14px;background:rgba(12,13,16,.35)}details{border:1px solid var(--line);border-radius:12px;background:rgba(12,13,16,.55);padding:10px 12px;margin-top:12px}summary{cursor:pointer;color:var(--gold2);font-weight:800}.backup-grid{display:grid;gap:10px;margin-top:10px}.backup-grid textarea{min-height:120px}.output{min-height:220px;white-space:pre-wrap;word-break:break-word;background:#090a0f;border:1px dashed var(--line);border-radius:14px;padding:14px;line-height:1.75;color:var(--text)}.fallback{display:none;margin-top:10px}.fallback textarea{min-height:120px}@media(max-width:560px){body{padding:12px}header{padding:12px 8px 0}.card{padding:14px}}
+<html lang="ja" data-theme="black-gold">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#101114">
+  <meta name="description" content="登録したルールで文章中の言葉をまとめて差し替える。">
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="icons/icon-192.png">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <link rel="stylesheet" href="assets/css/app.css">
+  <title>ワード変換メーカー｜なこ用ツール箱</title>
+</head>
+<body>
+  <div class="app">
+<section id="view-word">
+  <a class="toolbox-back-link" href="index.html">← ツール箱へ戻る</a>
+  <header><h1>ワード変換メーカー</h1><p class="lead">登録したルールを使って、文章中の言葉をまとめて差し替える。</p></header>
+  <main class="tool-layout">
+    <section class="card"><div class="card-title"><h2>1. 元テキスト</h2><button type="button" class="btn-compact ghost" id="wordClearInput">入力欄を空にする</button></div><textarea id="wordSource" placeholder="ここに変換したい文章を貼る"></textarea><div class="textarea-resize-row"><button type="button" class="ghost btn-standard btn-full" id="toggleWordSourceSize" aria-expanded="false">入力欄を広げる</button></div></section>
+    <section class="card">
+  <div class="card-title"><h2>2. 変換ルール</h2></div>
+  <div class="rules" id="wordRules"></div>
+  <div id="wordEmptyRules" class="empty">ルールがまだない。下の「ルール管理」かバックアップ復元で入れろ。</div>
 
-.rules{display:grid;gap:10px}.rule{display:grid;grid-template-columns:44px 1fr 36px 1fr;gap:8px;align-items:center;background:rgba(0,0,0,.22);border:1px solid var(--line);border-radius:14px;padding:10px}.arrow{text-align:center;color:var(--muted);font-weight:700}.check{appearance:none;-webkit-appearance:none;width:24px;height:24px;border-radius:6px;border:2px solid #f3f0e8;background:#fff;display:inline-block;margin:auto;position:relative;flex:0 0 24px}.check:checked{background:var(--gold);border-color:var(--gold)}.check:checked::after{content:"✓";position:absolute;left:50%;top:50%;transform:translate(-50%,-56%);color:white;font-weight:900;line-height:1;font-size:19px}@media(max-width:640px){.rule{grid-template-columns:34px 1fr;grid-template-areas:"check from" ". arrow" ". to"}.rule .check{grid-area:check;justify-self:center;align-self:center}.rule .from{grid-area:from}.rule .arrow{grid-area:arrow;text-align:left;padding-left:4px}.rule .to{grid-area:to}}
-</style></head><body><div class="app"><a class="toolbox-back-link" href="./index.html">← ツール箱へ戻る</a><header><h1>ワード変換メーカー</h1><p class="lead">文章中の特定ワードを、別のワードへ一括変換する。公開安全版なので、初期ルールは空。設定は端末内だけに保存する。</p></header>
-<section class="card"><div class="card-title"><h2>1. 元テキスト</h2><button class="small ghost" id="clearInput">入力欄を空にする</button></div><textarea id="source" placeholder="ここに変換したい文章を貼る"></textarea><p class="hint">入力内容と変換ルールは、この端末のブラウザ内に自動保存される。GitHub側へは送らない。</p></section>
-<section class="card"><div class="card-title"><h2>2. 変換ルール</h2><button class="small" id="addRule">ルール追加</button></div><div class="rules" id="rules"></div><div id="emptyRules" class="empty">ルールがまだない。必要な変換を追加するか、バックアップから復元しろ。</div><div class="toolbar"><button class="small" id="enableAll">全部ON</button><button class="small" id="disableAll">全部OFF</button><button class="small danger" id="resetRules">ルールを空に戻す</button></div><details><summary>設定バックアップ / 復元</summary><div class="backup-grid"><button class="small" id="exportSettings">設定バックアップを作る</button><textarea id="exportBox" readonly placeholder="ここにバックアップ用テキストが出る"></textarea><textarea id="importBox" placeholder="ここにバックアップ用テキストを貼って復元"></textarea><button class="small" id="importSettings">貼った設定を復元</button></div><p class="hint">Chromeの閲覧データ削除などで設定が消えた時は、ここにバックアップを貼り戻せ。</p></details><p class="hint">同時置換で処理する。長い語を優先して、短い語への巻き込み事故を減らす。</p></section>
-<section class="card"><div class="card-title"><h2>3. 出力</h2><button class="small" id="copyOutput">コピー</button></div><button class="primary" id="convert">変換する</button><div id="copyStatus" class="copy-status"></div><div class="output empty" id="output" style="margin-top:12px;">まだ出力はない。文章と変換ルールを入れて、「変換する」を押せ。</div><div class="fallback" id="fallback"><p class="hint">自動コピーが弾かれた時用。下の欄を長押ししてコピー。</p><textarea id="fallbackText" readonly></textarea></div></section><p class="hint">v2.0 / public-safe / local-only settings</p></div>
-<script>
-(()=>{
-const STORAGE_KEY='nakoWordReplacer.v1';const source=document.getElementById('source'),rulesEl=document.getElementById('rules'),emptyRules=document.getElementById('emptyRules'),output=document.getElementById('output'),copyStatus=document.getElementById('copyStatus'),fallback=document.getElementById('fallback'),fallbackText=document.getElementById('fallbackText'),exportBox=document.getElementById('exportBox'),importBox=document.getElementById('importBox');
-let state=load()||{source:'',rules:[],lastOutput:''};if(!Array.isArray(state.rules))state.rules=[];
-function load(){try{const raw=localStorage.getItem(STORAGE_KEY);return raw?JSON.parse(raw):null}catch{return null}}function save(){state.source=source.value;state.lastOutput=output.classList.contains('empty')?'':output.textContent;localStorage.setItem(STORAGE_KEY,JSON.stringify(state))}function escRegExp(s){return String(s).replace(/[.*+?^${}()|[\]\]/g,'\$&')}
-function renderRules(){rulesEl.innerHTML='';emptyRules.style.display=state.rules.length?'none':'block';state.rules.forEach(rule=>{const row=document.createElement('div');row.className='rule';const check=document.createElement('input');check.type='checkbox';check.className='check';check.checked=!!rule.enabled;check.addEventListener('change',()=>{rule.enabled=check.checked;save()});const from=document.createElement('input');from.className='from';from.placeholder='変換前';from.value=rule.from||'';from.addEventListener('input',()=>{rule.from=from.value;save()});const arrow=document.createElement('div');arrow.className='arrow';arrow.textContent='→';const to=document.createElement('input');to.className='to';to.placeholder='変換後';to.value=rule.to||'';to.addEventListener('input',()=>{rule.to=to.value;save()});row.append(check,from,arrow,to);rulesEl.append(row)})}
-function convertText(text,rules){const active=rules.filter(r=>r.enabled&&r.from).map((r,i)=>({...r,i})).sort((a,b)=>b.from.length-a.from.length||a.i-b.i);if(!active.length||!text)return text;const map=new Map(active.map(r=>[r.from,r.to??'']));const pattern=active.map(r=>escRegExp(r.from)).join('|');return text.replace(new RegExp(pattern,'g'),m=>map.get(m))}
-function runConvert(){const result=convertText(source.value,state.rules);output.textContent=result||'出力が空だ。元テキストを入れろ。';output.classList.toggle('empty',!result);fallback.style.display='none';copyStatus.textContent='変換した。';save()}
-async function copyText(text){const final=String(text??'');fallback.style.display='none';fallbackText.value=final;if(navigator.clipboard&&navigator.clipboard.writeText){try{await navigator.clipboard.writeText(final);return true}catch{}}const temp=document.createElement('textarea');temp.value=final;temp.setAttribute('readonly','');temp.style.position='fixed';temp.style.opacity='.01';document.body.appendChild(temp);let ok=false;try{temp.focus();temp.select();temp.setSelectionRange(0,temp.value.length);ok=document.execCommand('copy')}catch{}finally{document.body.removeChild(temp)}if(ok)return true;fallback.style.display='block';fallbackText.focus();fallbackText.select();copyStatus.textContent='自動コピーが弾かれた。下の欄をコピーして。';return false}
-function exportSettings(){const data={tool:'word-replacer',version:2,source:source.value,rules:state.rules};exportBox.value=JSON.stringify(data,null,2);copyText(exportBox.value).then(ok=>copyStatus.textContent=ok?'設定バックアップをコピーした。':'設定バックアップを作った。')}
-function importSettings(){try{const data=JSON.parse(importBox.value);const rules=Array.isArray(data.rules)?data.rules:[];state.rules=rules.map(r=>({enabled:r.enabled!==false,from:String(r.from??''),to:String(r.to??'')}));if(typeof data.source==='string')source.value=data.source;renderRules();save();copyStatus.textContent='設定を復元した。'}catch{copyStatus.textContent='復元できない。バックアップ用テキストが壊れている。'}}
-document.getElementById('addRule').addEventListener('click',()=>{state.rules.push({enabled:true,from:'',to:''});renderRules();save()});document.getElementById('enableAll').addEventListener('click',()=>{state.rules.forEach(r=>r.enabled=true);renderRules();save()});document.getElementById('disableAll').addEventListener('click',()=>{state.rules.forEach(r=>r.enabled=false);renderRules();save()});document.getElementById('resetRules').addEventListener('click',()=>{if(!confirm('ルールを空に戻す。いい？'))return;state.rules=[];renderRules();save();copyStatus.textContent='ルールを空に戻した。'});document.getElementById('clearInput').addEventListener('click',()=>{source.value='';save()});document.getElementById('convert').addEventListener('click',runConvert);document.getElementById('copyOutput').addEventListener('click',async()=>{const text=output.classList.contains('empty')?'':output.textContent;if(!text){copyStatus.textContent='コピーする出力がまだない。';return}if(await copyText(text))copyStatus.textContent='コピーした。'});document.getElementById('exportSettings').addEventListener('click',exportSettings);document.getElementById('importSettings').addEventListener('click',importSettings);source.addEventListener('input',save);source.value=state.source||'';if(state.lastOutput){output.textContent=state.lastOutput;output.classList.remove('empty')}renderRules();save();
-})();
-</script></body></html>
+  <div class="actions">
+    <button type="button" class="btn-standard" id="wordEnableAll">全ルールON</button>
+    <button type="button" class="btn-standard" id="wordDisableAll">全ルールOFF</button>
+    <button type="button" class="primary wide btn-primary-action" id="wordConvert">変換する</button>
+  </div>
+
+  <details>
+    <summary>ルール管理</summary>
+    <div class="character-manager">
+      <div class="manager-section">
+        <h3 class="manager-heading">ルールを追加</h3>
+        <button type="button" class="btn-standard btn-full" id="wordAddRule">新しいルールを追加</button>
+        <p class="hint">追加したルールは、上の一覧で変換前・変換後を入力する。</p>
+      </div>
+      <div class="manager-section danger-zone">
+        <h3 class="manager-heading">登録済みルールを削除</h3>
+        <p class="hint">上のON/OFFとは別。ここで削除対象だけを選ぶ。</p>
+        <div id="deleteRuleList" class="delete-rule-list"></div>
+        <div id="emptyDeleteRules" class="empty">削除できるルールがまだない。</div>
+        <div class="delete-tools">
+          <button type="button" class="btn-standard" id="selectAllRulesForDelete">全ルール選択</button>
+          <button type="button" class="btn-standard" id="clearRuleDeleteSelection">選択解除</button>
+        </div>
+        <div id="deleteRuleSelectionStatus" class="delete-status">削除対象は未選択。</div>
+        <button type="button" class="danger delete-submit btn-danger-action btn-full" id="deleteSelectedRules" disabled>選択したルールを削除</button>
+      </div>
+    </div>
+  </details>
+
+  <details>
+    <summary>設定バックアップ / 復元</summary>
+    <div class="backup-grid">
+      <div class="backup-actions">
+        <button type="button" class="btn-standard" id="wordExportSettings">バックアップを作る</button>
+        <button type="button" class="primary btn-standard" id="wordCopyExportSettings">バックアップをコピー</button>
+      </div>
+      <textarea id="wordExportBox" readonly placeholder="ここにバックアップ用テキストが出る"></textarea>
+      <textarea id="wordImportBox" placeholder="ここにバックアップ用テキストを貼って復元"></textarea>
+      <button type="button" class="btn-standard btn-full" id="wordImportSettings">貼った設定を復元</button>
+    </div>
+  </details>
+</section>
+    <section class="card span-two"><div class="card-title"><h2>3. 出力</h2><button type="button" class="btn-compact" id="wordCopyOutput">コピー</button></div><div class="output empty" id="wordOutput">まだ出力はない。文章と変換ルールを入れて、「変換する」を押せ。</div><div id="wordCopyStatus" class="copy-status"></div><div class="fallback" id="wordFallback"><p class="hint">自動コピーが弾かれた時用。下の欄を長押ししてコピー。</p><textarea id="wordFallbackText" readonly></textarea></div></section>
+    <details class="info-details span-two">
+      <summary>このツールの仕様</summary>
+      <div class="info-copy">
+        <p>ONになっているルールだけを使って、文章を一括変換する。</p>
+        <p>変換元が重なる時は、長い言葉を先に処理して巻き込みを減らす。</p>
+        <p>ON/OFFの選択と、削除用の選択は別物だ。削除は「ルール管理」の中でやれ。</p>
+      </div>
+    </details>
+    <details class="info-details span-two">
+      <summary>保存・バックアップについて</summary>
+      <div class="info-copy">
+        <p>入力文、変換ルール、ON/OFF状態は、この端末のブラウザ内へ自動保存する。</p>
+        <p>スマホとPCでは勝手に同期しない。別端末へ移す時はバックアップを作って復元しろ。</p>
+        <p>ブラウザのデータを消すと設定も消えることがある。大事な設定はバックアップを残せ。</p>
+      </div>
+    </details>
+  </main>
+</section>
+  </div>
+  <script type="module" src="assets/js/word-replacer.js"></script>
+</body>
+</html>
