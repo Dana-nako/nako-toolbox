@@ -3,8 +3,12 @@ import { safeGet, safeSet, loadJson, saveJson, copyText } from './common.js';
 'use strict';
 
 async function bootNameReplacer() {
-  const response = await fetch('./name-replacer.js?v=13', { cache: 'no-store' });
-  if (!response.ok) throw new Error(`name-replacer.js: ${response.status}`);
+  const scriptUrl = new URL('./name-replacer.js?v=15', import.meta.url);
+  const response = await fetch(scriptUrl, { cache: 'no-store' });
+
+  if (!response.ok) {
+    throw new Error(`name-replacer.js: ${response.status}`);
+  }
 
   let source = await response.text();
   source = source.replace(/^import[^\n]+\n/, '');
@@ -29,6 +33,7 @@ async function bootNameReplacer() {
 bootNameReplacer().catch(error => {
   console.error(error);
   const status = document.getElementById('status');
+
   if (status) {
     status.textContent = '起動に失敗した。ページを再読み込みして。';
     status.style.color = '#ffb3b3';
