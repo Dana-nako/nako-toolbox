@@ -1,4 +1,4 @@
-const CACHE_NAME = 'nako-toolbox-v15-name-loader-path-fix';
+const CACHE_NAME = 'nako-toolbox-v16-single-name-icon-fix';
 const ASSETS = [
   './',
   './index.html',
@@ -8,13 +8,11 @@ const ASSETS = [
   './assets/css/app.css',
   './assets/js/common.js',
   './assets/js/dashboard.js',
-  './assets/js/name-replacer.js',
-  './assets/js/name-replacer-loader.js',
+  './assets/js/name-replacer.js?v=16',
   './assets/js/word-replacer.js',
   './assets/images/dana-dashboard.jpg',
-  './icons/icon-192.png',
-  './icons/icon-512.png',
-  './icons/icon-maskable-512.png'
+  './icons/icon-192.png?v=16',
+  './icons/icon-512.png?v=16'
 ];
 
 self.addEventListener('install', event => {
@@ -29,7 +27,9 @@ self.addEventListener('activate', event => {
   event.waitUntil(
     caches.keys()
       .then(keys => Promise.all(
-        keys.filter(key => key !== CACHE_NAME).map(key => caches.delete(key))
+        keys
+          .filter(key => key !== CACHE_NAME)
+          .map(key => caches.delete(key))
       ))
       .then(() => self.clients.claim())
   );
@@ -42,7 +42,9 @@ self.addEventListener('fetch', event => {
     caches.match(event.request)
       .then(cached => cached || fetch(event.request).then(response => {
         const copy = response.clone();
-        caches.open(CACHE_NAME).then(cache => cache.put(event.request, copy));
+        caches.open(CACHE_NAME).then(cache => {
+          cache.put(event.request, copy);
+        });
         return response;
       }))
       .catch(() => caches.match('./index.html'))
