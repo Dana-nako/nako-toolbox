@@ -133,7 +133,7 @@ button{
 /* ===== Dashboard hero preview v4 ===== */
 
 .dashboard-view{
-  padding:0 0 30px;
+  padding:0 0 calc(30px + env(safe-area-inset-bottom));
   overflow:hidden;
 }
 

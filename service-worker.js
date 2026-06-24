@@ -1,19 +1,20 @@
-const CACHE_NAME = 'nako-toolbox-v12-github-ready';
+const CACHE_NAME = 'nako-toolbox-v14-name-fix-safe-area';
 const ASSETS = [
-  "./",
-  "./index.html",
-  "./name-replacer.html",
-  "./word-replacer.html",
-  "./manifest.json",
-  "./assets/css/app.css",
-  "./assets/js/common.js",
-  "./assets/js/dashboard.js",
-  "./assets/js/name-replacer.js",
-  "./assets/js/word-replacer.js",
-  "./assets/images/dana-dashboard.jpg",
-  "./icons/icon-192.png",
-  "./icons/icon-512.png",
-  "./icons/icon-maskable-512.png"
+  './',
+  './index.html',
+  './name-replacer.html',
+  './word-replacer.html',
+  './manifest.json',
+  './assets/css/app.css',
+  './assets/js/common.js',
+  './assets/js/dashboard.js',
+  './assets/js/name-replacer.js',
+  './assets/js/name-replacer-loader.js',
+  './assets/js/word-replacer.js',
+  './assets/images/dana-dashboard.jpg',
+  './icons/icon-192.png',
+  './icons/icon-512.png',
+  './icons/icon-maskable-512.png'
 ];
 
 self.addEventListener('install', event => {
