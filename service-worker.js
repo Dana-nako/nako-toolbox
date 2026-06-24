@@ -1,4 +1,4 @@
-const CACHE_NAME = 'nako-toolbox-v16-single-name-icon-fix';
+const CACHE_NAME = 'nako-toolbox-v17-icon-restore';
 const ASSETS = [
   './',
   './index.html',
@@ -11,8 +11,8 @@ const ASSETS = [
   './assets/js/name-replacer.js?v=16',
   './assets/js/word-replacer.js',
   './assets/images/dana-dashboard.jpg',
-  './icons/icon-192.png?v=16',
-  './icons/icon-512.png?v=16'
+  './icons/icon-192.png?v=17',
+  './icons/icon-512.png?v=17'
 ];
 
 self.addEventListener('install', event => {
